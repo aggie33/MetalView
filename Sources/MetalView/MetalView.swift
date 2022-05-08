@@ -28,7 +28,7 @@ private class MetalViewDelegate: NSObject, MTKViewDelegate {
     }
 }
 
-@available(macOS 10.15, *)
+@available(tvOS 13.0, iOS 13.0, macOS 10.15, *)
 /// Displays Metal content.
 public struct MetalView {
     private var device: MTLDevice?
@@ -60,13 +60,13 @@ public struct MetalView {
         MTKView(frame: .zero, device: device)
     }
     
-    func draw(do draw: @escaping (MTKView) -> Void) -> Self {
+    public func draw(do draw: @escaping (MTKView) -> Void) -> Self {
         let copy = self
         copy.delegate.draw = draw
         return copy
     }
     
-    func onSizeChange(do something: @escaping (MTKView, CGSize) -> Void ) -> Self {
+    public func onSizeChange(do something: @escaping (MTKView, CGSize) -> Void ) -> Self {
         let copy = self
         copy.delegate.sizeChanged = something
         return copy
@@ -96,25 +96,25 @@ public struct MetalView {
     }
     
     
-    func needsRedrawing() -> Self {
+    public func needsRedrawing() -> Self {
         var copy = self
         copy.enablesSetNeedsDisplay = true
         return copy
     }
     
-    func clearColor(red: Double, green: Double, blue: Double, alpha: Double = 1) -> Self {
+    public func clearColor(red: Double, green: Double, blue: Double, alpha: Double = 1) -> Self {
         var copy = self
         copy.clearColor = MTLClearColor(red: red, green: green, blue: blue, alpha: alpha)
         return copy
     }
     
-    func colorFormat(_ format: MTLPixelFormat) -> Self {
+    public func colorFormat(_ format: MTLPixelFormat) -> Self {
         var copy = self; copy.pixelColorFormat = format; return copy
     }
 }
 
 #if os(iOS) || os(tvOS)
-@available(macOS 10.15, *)
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, *)
 extension MetalView: UIViewRepresentable {
     public func makeUIView(context: Context) -> MTKView {
         makeView()
